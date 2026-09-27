@@ -53,7 +53,7 @@ if login_berhasil:
         nama_misi = "Misi Tidak Tersedia"
         persen_bonus = "Persen Bonus Tidak Tersedia"
     if nama_misi == "Misi Tidak Tersedia":
-        print("Misi Tidak Tersedia, Silahkan Pilih Misi yang Tersedia")
+        print("Misi Tidak Tersedia, Silahkan Pilih Misi Yang Tersedia")
     else:
         reward_bonus = reward_dasar * persen_bonus
         reward_akhir = reward_dasar + reward_bonus
