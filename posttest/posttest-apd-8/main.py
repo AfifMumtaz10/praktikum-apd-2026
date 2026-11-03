@@ -1,7 +1,7 @@
 from colorama import init
 from data import data_akun
 from utils import bersihkan_layar
-from tampilan import tampil_menu, error, info
+from tampilan import pilih_menu, info
 from auth import masuk, daftar_akun
 from menu import menu_admin, menu_user
 
@@ -9,13 +9,11 @@ from menu import menu_admin, menu_user
 def program_utama():
     while True:
         bersihkan_layar()
-        tampil_menu("SISTEM INFORMASI SISA STOK BAHAN MAKANAN KOS MINGGUAN", [
+        pilih = pilih_menu("SISTEM INFORMASI SISA STOK BAHAN MAKANAN KOS MINGGUAN", [
             ("1", "Login"),
             ("2", "Register"),
             ("0", "Keluar"),
         ])
-
-        pilih = input("Pilih menu: ").strip()
         bersihkan_layar()
 
         if pilih == "1":
@@ -36,10 +34,6 @@ def program_utama():
         elif pilih == "0":
             info("Terima kasih, program selesai.")
             break
-
-        else:
-            error("Pilihan menu tidak tersedia!")
-            input("Tekan Enter untuk lanjut...")
 
 
 if __name__ == "__main__":

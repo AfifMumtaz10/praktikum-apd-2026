@@ -1,5 +1,5 @@
 from utils import bersihkan_layar
-from tampilan import tampil_menu, lihat_bahan, lihat_akun, error, info
+from tampilan import pilih_menu, lihat_bahan, lihat_akun, info
 from crud import tambah_bahan, ubah_bahan, hapus_bahan, catat_pemakaian
 
 
@@ -14,7 +14,7 @@ def menu_admin(akun):
 
     while True:
         bersihkan_layar()
-        tampil_menu(f"MENU ADMIN - {akun}", [
+        pilih = pilih_menu(f"MENU ADMIN - {akun}", [
             ("1", "Lihat Bahan"),
             ("2", "Tambah Bahan"),
             ("3", "Ubah Bahan"),
@@ -22,8 +22,6 @@ def menu_admin(akun):
             ("5", "Lihat Daftar Akun"),
             ("0", "Logout"),
         ])
-
-        pilih = input("Pilih menu: ").strip()
         bersihkan_layar()
 
         if pilih == "0":
@@ -31,11 +29,7 @@ def menu_admin(akun):
             input("Tekan Enter untuk lanjut...")
             return
 
-        if pilih in aksi:
-            aksi[pilih]()
-        else:
-            error("Pilihan menu tidak tersedia!")
-
+        aksi[pilih]()
         input("\nTekan Enter untuk lanjut...")
 
 
@@ -47,13 +41,11 @@ def menu_user(akun):
 
     while True:
         bersihkan_layar()
-        tampil_menu(f"MENU PENGGUNA - {akun}", [
+        pilih = pilih_menu(f"MENU PENGGUNA - {akun}", [
             ("1", "Lihat Bahan"),
             ("2", "Catat Pemakaian Bahan"),
             ("0", "Logout"),
         ])
-
-        pilih = input("Pilih menu: ").strip()
         bersihkan_layar()
 
         if pilih == "0":
@@ -61,9 +53,5 @@ def menu_user(akun):
             input("Tekan Enter untuk lanjut...")
             return
 
-        if pilih in aksi:
-            aksi[pilih]()
-        else:
-            error("Pilihan menu tidak tersedia!")
-
+        aksi[pilih]()
         input("\nTekan Enter untuk lanjut...")

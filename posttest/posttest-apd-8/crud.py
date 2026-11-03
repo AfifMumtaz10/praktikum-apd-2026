@@ -1,6 +1,10 @@
 from data import data_bahan
 from utils import minta_teks, minta_angka, temukan_bahan
-from tampilan import lihat_bahan, judul, sukses, error, info
+from tampilan import (
+    lihat_bahan, judul, sukses, error, info, pilih_opsi, konfirmasi
+)
+
+BATAL = "__batal__"
 
 
 def pilih_bahan():
@@ -8,16 +12,18 @@ def pilih_bahan():
         info("Tidak ada bahan yang tersedia.")
         return None
 
-    nomor = minta_angka("Nomor bahan (0 = batal): ")
+    pilihan = [
+        (f"{nomor}. {nama}", nama)
+        for nomor, nama in enumerate(data_bahan, start=1)
+    ]
+    pilihan.append(("Batal", BATAL))
 
-    if nomor == 0:
+    hasil = pilih_opsi("Pilih bahan", pilihan)
+
+    if hasil is None or hasil == BATAL:
         return None
 
-    if nomor < 1 or nomor > len(data_bahan):
-        error("Nomor di luar daftar!")
-        return pilih_bahan()
-
-    return list(data_bahan.keys())[nomor - 1]
+    return hasil
 
 
 def tambah_bahan():
@@ -59,6 +65,52 @@ def ubah_bahan():
 
     if nama_lama is None:
         info("Pengubahan dibatalkan.")
+        return
+
+    bahan = data_bahan[nama_lama]
+    nama_baru = input("Nama baru (Enter = tetap): ").strip()
+
+    if nama_baru:
+        nama_terdaftar = temukan_bahan(nama_baru)
+
+        if nama_terdaftar not in (None, nama_lama):
+            error("Nama bahan sudah digunakan.")
+        else:
+            data_bahan_baru = {}
+
+            for nama, isi in data_bahan.items():
+                data_bahan_baru[
+                    nama_baru if nama == nama_lama else nama
+                ] = isi
+
+            data_bahan.clear()
+            data_bahan.update(data_bahan_baru)
+
+    for kunci, label in [
+        ("sisa", "Sisa baru"),
+        ("minggu", "Minggu baru"),
+        ("batas", "Batas minimal baru")
+    ]:
+        isian = input(f"{label}: ").strip()
+
+        if isian:
+            if isian.isdigit():
+                nilai = int(isian)
+
+                if kunci == "minggu" and nilai < 1:
+                    error("Minggu harus minimal 1.")
+                else:
+                    bahan[kunci] = nilai
+            else:
+                error("Input harus berupa angka bulat.")
+
+    satuan_baru = input("Satuan baru (Enter = tetap): ").strip()
+
+    if satuan_baru:
+        bahan["satuan"] = satuan_baru
+
+    sukses("Proses pengubahan selesai.")
+
 
 def hapus_bahan():
     judul("HAPUS BAHAN")
@@ -73,15 +125,11 @@ def hapus_bahan():
         info("Penghapusan dibatalkan.")
         return
 
-    yakin = input(f"Hapus '{nama}'? (y/n): ").strip().lower()
-
-    if yakin == "y":
+    if konfirmasi(f"Hapus '{nama}'?"):
         data_bahan.pop(nama)
         sukses("Bahan berhasil dihapus!")
-    elif yakin == "n":
-        info("Penghapusan dibatalkan.")
     else:
-        error("Masukkan y atau n.")
+        info("Penghapusan dibatalkan.")
 
 
 def catat_pemakaian():

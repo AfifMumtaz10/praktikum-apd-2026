@@ -1,6 +1,6 @@
 from data import data_akun, BATAS_LOGIN
 from utils import minta_teks, minta_sandi, temukan_akun
-from tampilan import judul, sukses, error, info
+from tampilan import judul, sukses, error, info, pilih_opsi
 
 jumlah_login_gagal = 0
 
@@ -24,12 +24,17 @@ def daftar_akun():
         error("Kata sandi minimal 4 karakter!")
         sandi = minta_sandi("Kata sandi: ")
 
+    peran = pilih_opsi("Daftar sebagai", [("User", "user"), ("Admin", "admin")])
+
+    if peran is None:
+        peran = "user"
+
     data_akun[nama] = {
         "sandi": sandi,
-        "peran": "user"
+        "peran": peran
     }
 
-    sukses("Registrasi berhasil. Silakan login.")
+    sukses(f"Registrasi berhasil sebagai {peran}. Silakan login.")
 
 
 def masuk():
